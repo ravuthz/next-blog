@@ -1,0 +1,145 @@
+---
+title: "NextJS 13 Blog Starter"
+excerpt: "NextJS 13 is here and now we can create dynamic markdown blog."
+coverImage: "https://dummyimage.com/720x460/000/fff.png&text=NextJS%2013%20Blog"
+date: "2023-01-05T05:05:15.253Z"
+author: "Ravuthz"
+authorEmail: "ravuthz@gmail.com"
+authorImage: "https://avatars.githubusercontent.com/u/11207890?s=400&v=4"
+gravatarImage: "http://s.gravatar.com/avatar/3f9ea148ade811b13cc6adac470463d6"
+tags: "nextjs, tutorial, typescript, dev"
+---
+
+{/* https://avatars.githubusercontent.com/u/11207890?s=400&v=4 */}
+
+NextJS 13 is here and now we can create dynamic markdown blog.
+
+![](https://dummyimage.com/720x460/000/fff.png&text=NextJS%2013%20Blog)
+
+### Getting Started
+
+Let's get things started with create-next-app, don't forget to add the experimental tag.
+
+```bash
+yarn create next-app --experimental-app rean-code-blog.github.io
+```
+
+Note: this install gives us the option to choose between using Typescript or Javascript, and toggling ESLint. We will be using **Typescript** for this tutorial but feel free to choose Javascript if you like to live life dangerously.
+
+Here are the rest of the dependencies we will be using for the blog. You can install them now, or later on as we go.
+
+```bash
+yarn add remark remark-html gray-matter date-fns
+```
+
+#### Install the TailwindCSS
+
+```bash
+yarn add -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
+```js
+// tailwind.config.js
+
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./app/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}"
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+```
+
+```css
+/* gobal.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+### Let's make a blog!
+
+#### Home page
+Create a simple home (index) page to start with. Later we will add a way to fetch our recent posts to display and allow users to navigate to them.
+
+```js
+// app/page.tsx
+
+export default function Home() {
+  return (
+    <main>
+      <div className="relative px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
+          <div>
+            <div>
+              <h1 className="text-4xl font-bold tracking-tight sm:text-center sm:text-6xl">
+                NextJS Static Blog
+              </h1>
+              <p className="mt-6 text-lg leading-8 text-gray-600 sm:text-center">
+                Welcome to Static Blog
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
+}
+```
+
+#### NavLink
+
+```js
+// components/NavLink.tsx
+
+import Link from "next/link";
+
+export type NavLink = {
+  href: string;
+  children: React.ReactNode;
+};
+
+export const NavLink = ({ href, children }: NavLink) => {
+  return (
+    <Link className="hover:text-gray-300 hover:underline" href={href}>
+      {children}
+    </Link>
+  );
+};
+```
+
+#### NavBar
+
+```js
+// components/NavBar.tsx
+
+import { NavLink } from "./NavLink";
+
+export default function NavBar() {
+  return (
+    <div className="bg-neutral-800">
+      <nav className="container py-2 mx-auto">
+        <ul className="flex space-x-6 text-lg justify-center">
+          <li>
+            <NavLink href="/">Home</NavLink>
+          </li>
+          <li>
+            <NavLink href="/blog">Blog</NavLink>
+          </li>
+          <li>
+            <NavLink href="https://github.com/ravuthz/nextjs-starter-blog">
+              Github
+            </NavLink>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  );
+}
+```
